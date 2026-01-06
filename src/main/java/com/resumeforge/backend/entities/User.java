@@ -9,12 +9,12 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Document(collection = "users")
@@ -39,7 +39,8 @@ public class User {
 
     private List<String> resumeIds = new ArrayList<>();
 
-    private Set<Role> roles = new HashSet<>();
+    @Field(targetType = FieldType.STRING)
+    private Role role;
 
     private  String firstName;
     private  String lastName;

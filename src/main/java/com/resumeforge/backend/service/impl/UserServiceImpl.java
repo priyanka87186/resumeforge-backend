@@ -1,6 +1,7 @@
 package com.resumeforge.backend.service.impl;
 
 import com.resumeforge.backend.entities.User;
+import com.resumeforge.backend.enums.Role;
 import com.resumeforge.backend.exception.DuplicateResourceException;
 import com.resumeforge.backend.payload.request.RegisterRequest;
 import com.resumeforge.backend.payload.response.UserResponse;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword( passwordEncoder.encode(registerRequest.getPassword()));
         user.setSubscriptionStatus(registerRequest.getSubscriptionStatus());
         user.setResumeIds(registerRequest.getResumeIds());
-        user.setRoles(HashSet.newHashSet(1));
+        user.setRole(Role.USER);
         User savedUser = userRepository.save(user);
         return this.UsertoUserResponse(savedUser);
     }
@@ -92,8 +92,8 @@ public class UserServiceImpl implements UserService {
         }
         User adminUser = new User();
         adminUser.setEmail("a@gmail.com");
-        adminUser.setPassword("admin123");
-        adminUser.setRoles(HashSet.newHashSet(0));
+        adminUser.setPassword(passwordEncoder.encode("admin123"));
+        adminUser.setRole(Role.ADMIN);
         userRepository.save(adminUser);
     }
 

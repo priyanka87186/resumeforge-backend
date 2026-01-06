@@ -6,9 +6,12 @@ import com.resumeforge.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("api/users")
@@ -18,6 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody RegisterRequest userRequest) {
         // User creation logic here
         UserResponse userResponse = userService.register(userRequest);
@@ -52,5 +56,11 @@ public class UserController {
         // Logic to delete user
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String me(Authentication authentication) {
+        return authentication.getName();
     }
 }
